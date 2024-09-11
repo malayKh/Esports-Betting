@@ -1,0 +1,14 @@
+Consist of one main contract for prize distribution between manager and team participants. Rest all will be different subcontracts for each game tournamnet.
+Team manager creates their team to participate in tournaments by registering on the subcontract.
+The team manager takes a 5% royalty from the players' salaries(this is done in automatically in subcontract prize distribution)
+The ERC20 token is used to pay tournament entry fees while registering(on the subcontract)
+The distribution of prize money must be done according to the players registered in the tournaments and in an automated manner(main contract calling subcontract function)
+The subcontracts keep a mapping of managers address to a struct containing the team players(lets say 5)
+Main contract has a mapping of subcontract to the number of players for that contract(as you can have solos, duos ,trios etc subcontracts)
+the main contract calls subcontract funtion for automatic distribution fo rewards
+the main contract calls the subcontract function with the address of team managers whose team won which position(first , second, third)
+after the tournament is over, there is a funtion to free up memory by removing the mappings and other team memory
+
+--------------------------------------------------------------------------------------------------------------------
+
+
