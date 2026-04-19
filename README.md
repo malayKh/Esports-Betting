@@ -103,3 +103,99 @@ earlyWithdrawalLimit (default: 80%)
 - Odds are locked at bet time
 - Contract may borrow to stay solvent
 - Max bet scales with available liquidity
+
+# Main Tournament Contract
+
+A Solidity contract that manages tournament entry, tax collection, and coordination with multiple sub-contracts responsible for game logic and prize distribution.
+
+---
+
+## ⚙️ Core Idea
+
+- Players (via managers) register teams into tournaments
+- Entry fees are collected in ERC20 tokens
+- A platform tax (6.25%) is deducted
+- Remaining funds are sent to sub-contracts
+- Sub-contracts handle gameplay, rewards, and payouts
+
+---
+
+## 🧩 Architecture
+
+- **Main Contract** → Handles payments, tax, and coordination  
+- **Sub Contracts** → Handle tournament logic, rewards, and player management  
+
+---
+
+## 🔑 Key Features
+
+- **Role-Based Access**
+  - `ADMIN_ROLE` → controls tournaments
+  - `MANAGER_ROLE` → registers teams
+
+- **Tax System**
+  - 6.25% fee on every entry
+  - Accumulated and withdrawable by admin
+
+- **Modular Design**
+  - Supports multiple tournaments via sub-contracts
+
+---
+
+## 🎮 Core Flow
+
+1. Admin adds a tournament:
+
+addSubContract(subContract, playerCount, entryFee)
+
+
+2. Manager registers a team:
+
+registerTeam(subContract, players)
+
+- Transfers entry fee
+- Deducts tax
+- Sends remaining funds to sub-contract
+
+3. Admin distributes prizes:
+
+distributePrizes(subContract, winners, amounts)
+
+
+4. Tournament cleanup:
+
+cleanupTournament(subContract)
+
+
+---
+
+## 💰 Tax Logic
+
+- Tax = `6.25%` (625 basis points)
+- Collected in contract
+- Withdrawable via:
+
+withdrawTax(to, amount)
+
+
+---
+
+## 🛠 Admin Functions
+
+- `addSubContract()` → Register new tournament
+- `setSubContractEntryFee()` → Update entry fee
+- `distributePrizes()` → Send rewards
+- `cleanupTournament()` → Close tournament
+- `withdrawSubContractTokens()` → Recover funds
+- `setSubContractCaptainRoyalty()` → Adjust royalty
+- `withdrawTax()` → Withdraw platform fees
+
+---
+
+## 📌 Notes
+
+- Each manager can register one team per sub-contract
+- Sub-contract must be active to interact
+- Entry fee includes tax deduction before forwarding
+- Main contract does not manage prize logic directly
+
